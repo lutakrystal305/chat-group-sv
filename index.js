@@ -1,6 +1,18 @@
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const cors = require('cors');
+const mongoose= require('mongoose');
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
+const pass= process.env.PASSWORD;
+const loginRouter = require("./route/login.route");
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+mongoose.connect(`mongodb+srv://lutakrystal305:${pass}@cluster0.ksoml.mongodb.net/chat?authSource=admin&replicaSet=atlas-1ht9s4-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true`)
 
 
 
@@ -15,6 +27,11 @@ var io = require('socket.io')(server, {
     credentials: true
   }
 });
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(cookieParser());
+
 app.use(cors());
 
 app.use(function(req, res, next) { 
@@ -28,7 +45,8 @@ app.use(function(req, res, next) {
     } else { 
     return next(); 
     } 
-}); 
+});
+app.use('/user', loginRouter) 
 server.listen(9999, () => {
     console.log("listen on port 9999!");
 })
