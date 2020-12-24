@@ -46,8 +46,9 @@ app.use(function(req, res, next) {
     return next(); 
     } 
 });
-app.use('/user', loginRouter) 
-server.listen(9999, () => {
+app.use('/user', loginRouter);
+const port = process.env.PORT || 9999; 
+server.listen(port, () => {
     console.log("listen on port 9999!");
 })
 const userOnline = [];
