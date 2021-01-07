@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const md5 = require('md5');
 const User = require('../models/user.model');
+const Message = require('../models/message.model');
+const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const transporter =  nodemailer.createTransport({ // config mail server
     service: 'gmail',
@@ -53,9 +55,8 @@ module.exports.login = async function (req, res, next) {
         console.log(false)
       }
     }
-  };
+  }
   module.exports.create = async function (req, res, next) {
-    console.log(req.body);
     const email = req.body.email;
     const user = await User.findOne({email});
     if (user) {
@@ -67,7 +68,6 @@ module.exports.login = async function (req, res, next) {
   
       const newUser = await new User(req.body);
       newUser.save();
-      console.log(newUser);
       var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
         from: 'Luta Krystal',
         to: req.body.email,
@@ -85,3 +85,24 @@ module.exports.login = async function (req, res, next) {
       res.json(req.body);
     }
   }
+  /*module.exports.getRoom = async (req, res, next) => {
+    const user = await User.findOne({_id: req.body.user._id});
+    user.groups = user.groups.sort((a,b) => b.update-a.update);
+   /* user.groups.forEach(async (x) => {
+      x._id = mongoose.Types.ObjectId(x._id);
+      let mess = await Message.find({to: x._id}).sort({date: -1});
+      x.topMess = mess[0];
+      console.log(x.topMess);
+    });*/
+    //res.json({yourRoom : user.groups});
+  //}
+module.exports.getMember = async (req, res, next) => {
+  const roomNow = req.body.roomNow;
+  let members = [];
+  for (let i = 0; i < roomNow.members.length; i++) {
+    let member = await User.findOne({_id: mongoose.Types.ObjectId(roomNow.members[i])});
+    members = [...members, member];
+
+  };
+  res.json({ members });
+}

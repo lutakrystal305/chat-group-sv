@@ -7,7 +7,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const pass= process.env.PASSWORD;
-const loginRouter = require("./route/login.route");
+const userRouter = require("./route/user.route");
+const chatRouter = require('./route/chat.route');
+const User = require("./models/user.model");
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
@@ -46,54 +48,56 @@ app.use(function(req, res, next) {
     return next(); 
     } 
 });
-app.use('/user', loginRouter);
+app.use('/user', userRouter);
+app.use('/chat', chatRouter);
 const port = process.env.PORT || 9999; 
 server.listen(port, () => {
     console.log("listen on port 9999!");
 })
-const userOnline = [];
+const usersOnline = [];
 io.on("connection", (socket) => {
     console.log(socket.id+'da CONNECT');
-    socket.on('login', (data) => {
-        console.log(socket.id+'da login');
-        if (userOnline.indexOf(data) < 0) {
-            userOnline.push(data);
-            socket.userName = data;
-            socket.emit('login-success', data)
-            io.sockets.emit('server-send-users-online', userOnline);
+    socket.on('user-connect', ({ user }) => {
+        console.log(user.name);
+        if (usersOnline.indexOf(user) === -1) {
+            usersOnline.push(user);
+            socket._id = user._id;
+            socket.userName = user.name;
+            socket.user = user;
+            io.sockets.emit('server-send-users-online', usersOnline);
         } else {
-            socket.emit('login-fail') 
+            io.sockets.emit('server-send-users-online', usersOnline);
         }
     })
-    socket.on('client-send-room', (data) => {
-        console.log(data);
-        socket.join(data);
-        if (socket.yourRooms) {
-            socket.yourRooms.push(data);
-        } else {
-            socket.yourRooms = [data];
+    socket.on('client-join-rooms', (data) => {
+        if (data) {
+            data.forEach((x) => {
+                socket.join(x._id);
+            })
         }
-        socket.roomNow = data
-        console.log(socket.rooms);
-        socket.emit('server-send-room-now', socket.roomNow);
-        socket.emit('server-send-your-rooms', socket.yourRooms);
     })
-    socket.on('client-change-room', (data) => {
+    socket.on('client-send-room-now', (data) => {
+        if (data) {
+            socket.join(data._id);
+        }
         socket.roomNow = data;
+        console.log(socket.roomNow._id);
         socket.emit('server-send-room-now', socket.roomNow);
     })
-    socket.on('client-send-chat', (data) => {
-        io.sockets.in(socket.roomNow).emit('server-send-chat', {user: socket.userName, message: data});
+    socket.on('client-send-message', (data) => {
+        console.log(data.message);
+        io.sockets.in(data.to._id).emit('server-send-message', {from: data.from, message: data.message, to: data.to, date: data.date});
     })
-    socket.on('logout', () => {
-        let z=userOnline.indexOf(socket.userName);
-        userOnline.splice(z,1);
-        socket.broadcast.emit('server-send-users-online', userOnline);
+    socket.on('client-leave-room', (data) => {
+        if (data) {
+            socket.leave(data._id)
+        }
+        socket.broadcast.to(data._id).emit('server-send-message', {from: {name: 'key'}, message: `${socket.user.name} has just leave room!`, to: data, date: Date.now()});
     })
     socket.on('disconnect', () => {
-        let z=userOnline.indexOf(socket.userName);
-        userOnline.splice(z,1);
-        socket.broadcast.emit('server-send-users-online', userOnline);
+        let z=usersOnline.indexOf(socket.user);
+        usersOnline.splice(z,1);
+        socket.broadcast.emit('server-send-users-online', usersOnline);
     })
 })
 app.get("/", (req, res) => {
