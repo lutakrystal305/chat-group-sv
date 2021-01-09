@@ -41,6 +41,31 @@ module.exports.login = async function (req, res, next) {
       next(error);
     }
   };
+  module.exports.loginFB = async (req, res, next) => {
+  console.log(req.body);
+  const user = await User.findOne({useID: req.body.userID});
+  if (!user) {
+    const newUser= new User(req.body);
+    await newUser.save();
+    const token = jwt.sign({ _id: newUser._id }, "shhh");
+    res.header("auth-token", token);
+    const client = {
+      newUser: newUser,
+      token: token
+    }
+    console.log(client);
+    res.json(client);
+  } else {
+      const token = jwt.sign({ _id: user._id }, "shhh");
+      res.header("auth-token", token);
+      const client = {
+        
+        token: token
+      };
+      console.log(client);
+    res.json(client);
+  }
+}
   module.exports.check = async function (req, res, next) {
     const token = req.body.token;
   
@@ -56,6 +81,7 @@ module.exports.login = async function (req, res, next) {
       }
     }
   }
+
   module.exports.create = async function (req, res, next) {
     const email = req.body.email;
     const user = await User.findOne({email});
