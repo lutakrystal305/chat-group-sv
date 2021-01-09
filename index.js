@@ -23,7 +23,7 @@ mongoose.connect(`mongodb+srv://lutakrystal305:${pass}@cluster0.ksoml.mongodb.ne
 const server = require('http').createServer(app);
 var io = require('socket.io')(server, {
     cors: {
-    origin: "http://localhost:3000",
+    origin: "https://kmess.herokuapp.com",
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
