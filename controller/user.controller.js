@@ -43,7 +43,7 @@ module.exports.login = async function (req, res, next) {
   };
   module.exports.loginFB = async (req, res, next) => {
   console.log(req.body);
-  const user = await User.findOne({useID: req.body.userID});
+  const user = await User.findOne({userID: req.body.userID});
   if (!user) {
     const newUser= new User(req.body);
     await newUser.save();
