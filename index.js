@@ -50,7 +50,7 @@ app.use(function(req, res, next) {
 });
 app.use('/user', userRouter);
 app.use('/chat', chatRouter);
-const port = 9999; 
+const port = process.env.PORT || 9999; 
 server.listen(port, () => {
     console.log("listen on port 9999!");
 })
