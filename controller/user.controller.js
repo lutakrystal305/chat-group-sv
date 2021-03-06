@@ -14,6 +14,7 @@ const transporter =  nodemailer.createTransport({ // config mail server
 
 module.exports.login = async function (req, res, next) {
     try {
+      console.log(req.body);
       const email = req.body.email;
       const password = req.body.password;
       const user = await User.findOne({email});
