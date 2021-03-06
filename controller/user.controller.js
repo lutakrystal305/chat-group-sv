@@ -36,6 +36,7 @@ module.exports.login = async function (req, res, next) {
           password: password,
           token: token
         };
+        console.log(client);
         res.json(client);
       }
     } catch (error) {
