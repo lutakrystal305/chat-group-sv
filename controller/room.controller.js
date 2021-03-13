@@ -56,8 +56,10 @@ module.exports.checkRoom = async (req, res, next) => {
 module.exports.getRoom = async (req, res, next) => {
     //req.body.user._id =mongoose.Types.ObjectId(req.body.user._id);
     //req.body.user.update = new Date(req.body.user.update);
-    let rooms = await Room.find({members: {$in: [req.body.user._id]}}).sort({update: -1})
+    let rooms = await Room.find({members: {$in: [req.body.user._id]}}).sort({update: -1});
+    console.log(rooms);
     res.json({yourRoom: rooms});
+   
 }
 module.exports.leaveRoom = async (req, res, next) => {
     const updateUser = await User.findOneAndUpdate({_id: req.body.user._id}, {
