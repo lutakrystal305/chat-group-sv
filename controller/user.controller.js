@@ -36,7 +36,7 @@ module.exports.login = async function (req, res, next) {
           password: password,
           token: token
         };
-        console.log(client);
+        //console.log(client);
         res.json(client);
       }
     } catch (error) {
@@ -44,7 +44,7 @@ module.exports.login = async function (req, res, next) {
     }
   };
   module.exports.loginFB = async (req, res, next) => {
-  console.log(req.body);
+  //console.log(req.body);
   const user = await User.findOne({userID: req.body.userID});
   if (!user) {
     const newUser= new User(req.body);
@@ -55,7 +55,7 @@ module.exports.login = async function (req, res, next) {
       newUser: newUser,
       token: token
     }
-    console.log(client);
+    //console.log(client);
     res.json(client);
   } else {
       const token = jwt.sign({ _id: user._id }, "shhh");
@@ -64,7 +64,7 @@ module.exports.login = async function (req, res, next) {
         
         token: token
       };
-      console.log(client);
+      //console.log(client);
     res.json(client);
   }
 }

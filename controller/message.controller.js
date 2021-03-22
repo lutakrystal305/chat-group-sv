@@ -29,7 +29,7 @@ module.exports.message = async (req, res, next) => {
 }*/
 module.exports.upMess = async (req, res, next) => {
     req.body.to = mongoose.Types.ObjectId(req.body.to._id);
-    console.log(req.body.to)
+    //console.log(req.body.to)
     const newMess = await new Message(req.body);
     await newMess.save();
     const updateRoom = await Room.findOneAndUpdate({_id: req.body.to}, {
