@@ -58,7 +58,8 @@ const usersOnline = [];
 io.on("connection", (socket) => {
     console.log(socket.id+'da CONNECT');
     socket.on('user-connect', ({ user }) => {
-        console.log(user.name);
+        console.log('nice!!');
+        console.log(user);
         if (usersOnline.indexOf(user) === -1) {
             usersOnline.push(user);
             socket._id = user._id;
