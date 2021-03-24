@@ -1,3 +1,4 @@
+const { cloudinary } = require('../utils/cloudinary');
 const jwt = require("jsonwebtoken");
 const md5 = require('md5');
 const User = require('../models/user.model');
@@ -110,7 +111,7 @@ module.exports.login = async function (req, res, next) {
             console.log('Message sent: ' +  info.response);
         }
       });
-      res.json(req.body);
+      res.json(newUser);
     }
   }
   /*module.exports.getRoom = async (req, res, next) => {
@@ -133,4 +134,11 @@ module.exports.getMember = async (req, res, next) => {
 
   };
   res.json({ members });
+}
+module.exports.upAvt = async (req, res, next) => {
+  const result = await cloudinary.uploader.upload(res.body.data, {upload_preset: 'chat_default'})
+  let user = await User.findOneAndUpdate({_id: req.body._id}, {
+      urlAvt: result.url
+  });
+  res.json(user);
 }
