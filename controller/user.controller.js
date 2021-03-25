@@ -136,11 +136,15 @@ module.exports.getMember = async (req, res, next) => {
   res.json({ members });
 }
 module.exports.upAvt = async (req, res, next) => {
-  console.log(req.body.data);
-  console.log(Buffer.from(req.body.data.uri).toString('base64'));
-  const result = await cloudinary.uploader.upload(req.body.data.uri, {upload_preset: 'chat_default'})
-  let user = await User.findOneAndUpdate({_id: req.body._id}, {
-      urlAvt: result.url
-  });
-  res.json(user);
+  try {
+    console.log(req.body.data);
+    console.log(Buffer.from(req.body.data.uri).toString('base64'));
+    const result = await cloudinary.uploader.upload('data:image/png;base64,' + req.body.data.uri, {upload_preset: 'chat_default'})
+    let user = await User.findOneAndUpdate({_id: req.body._id}, {
+        urlAvt: result.url
+    });
+    res.json(user);
+  } catch(error) {
+    console.log(error);
+  }
 }
