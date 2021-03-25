@@ -136,6 +136,7 @@ module.exports.getMember = async (req, res, next) => {
   res.json({ members });
 }
 module.exports.upAvt = async (req, res, next) => {
+  console.log(req.body);
   const result = await cloudinary.uploader.upload(res.body.data, {upload_preset: 'chat_default'})
   let user = await User.findOneAndUpdate({_id: req.body._id}, {
       urlAvt: result.url
