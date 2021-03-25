@@ -135,11 +135,10 @@ module.exports.getMember = async (req, res, next) => {
   };
   res.json({ members });
 }
-
 module.exports.upAvt = async (req, res, next) => {
   try {
     console.log(req.body.data);
-    let a = Buffer.from(res.body.data).toString('base64');
+    let a = Buffer.from(req.body.data.uri).toString('base64');
     console.log(a);
     const result = await cloudinary.uploader.upload('data:image/png;base64,' + a, {upload_preset: 'chat_default'});
     console.log(result);
