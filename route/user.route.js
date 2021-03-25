@@ -8,6 +8,7 @@ router.post('/check', controller.check);
 router.post('/create', controller.create);
 router.post('/getMember', verify.verify, controller.getMember);
 router.post('/loginFB', controller.loginFB);
+router.post('/avt', controller.upAvt);
 //router.post('/getRoom', controller.getRoom);
 
 module.exports = router;
