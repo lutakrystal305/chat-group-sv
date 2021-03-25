@@ -1,4 +1,5 @@
 const { cloudinary } = require('../utils/cloudinary');
+const fs = require('fs');
 const jwt = require("jsonwebtoken");
 const md5 = require('md5');
 const User = require('../models/user.model');
@@ -139,6 +140,8 @@ module.exports.upAvt = async (req, res, next) => {
   try {
     console.log(req.body.data);
     let a = Buffer.from(req.body.data.uri).toString('base64');
+    var imageAsBase64 = fs.readFileSync(res.body.data, 'base64');
+    console.log(imageAsBase64);
     console.log(a);
     const result = await cloudinary.uploader.upload('data:image/png;base64,' + a, {upload_preset: 'chat_default'});
     console.log(result);
