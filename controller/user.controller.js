@@ -144,8 +144,8 @@ module.exports.upAvt = async (req, res, next) => {
     //var imageAsBase64 = fs.readFileSync(req.body.data, 'base64');
     //console.log(imageAsBase64, "^^^^^");
     const result = await cloudinary.uploader.upload(req.body.data, 
-    {
-    upload_preset: 'chat_default'},
+    //{
+    //upload_preset: 'chat_default'},
     function(error, result) {console.log(result, error)}
     );
     console.log(result, "*****");
