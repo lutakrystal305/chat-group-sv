@@ -140,7 +140,8 @@ module.exports.upAvt = async (req, res, next) => {
     console.log(req.body.data);
     let a = Buffer.from(req.body.data.uri).toString('base64');
     console.log(a);
-    const result = await cloudinary.uploader.upload('data:image/png;base64,' + a, {upload_preset: 'chat_default'})
+    const result = await cloudinary.uploader.upload('data:image/png;base64,' + a, {upload_preset: 'chat_default'});
+    console.log(result);
     let user = await User.findOneAndUpdate({_id: req.body._id}, {
         urlAvt: result.url
     });
