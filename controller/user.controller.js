@@ -138,19 +138,19 @@ module.exports.getMember = async (req, res, next) => {
 }
 module.exports.upAvt = async (req, res, next) => {
   try {
-    console.log(req.body.data);
-    let a = Buffer.from(req.body.data).toString('base64');
-    console.log(a);
+    console.log(req.body.data, "***");
+    //let a = Buffer.from(req.body.data).toString('base64');
+    //console.log(a);
     //var imageAsBase64 = fs.readFileSync(req.body.data, 'base64');
     //console.log(imageAsBase64, "^^^^^");
-    const result = await cloudinary.uploader.upload(req.body.data, 
+    //const result = await cloudinary.uploader.upload(req.body.data, 
     //{
     //upload_preset: 'chat_default'},
-    function(error, result) {console.log(result, error)}
-    );
-    console.log(result, "*****");
+    //function(error, result) {console.log(result, error)}
+    //);
+    //console.log(result, "*****");
     let user = await User.findOneAndUpdate({_id: req.body._id}, {
-        urlAvt: result.url
+        urlAvt: res.body.data
     });
     res.json(user);
   } catch(error) {
