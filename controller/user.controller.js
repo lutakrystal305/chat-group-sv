@@ -150,7 +150,7 @@ module.exports.upAvt = async (req, res, next) => {
     //);
     //console.log(result, "*****");
     let user = await User.findOneAndUpdate({_id: req.body._id}, {
-        urlAvt: res.body.data
+        urlAvt: req.body.data
     });
     res.json(user);
   } catch(error) {
