@@ -6,6 +6,7 @@ const roomSchema = new mongoose.Schema({
 	host: String,
 	members: Array,
 	topMess: Object,
+	avt: String,
 	update: {type: Date, default: Date.now}
 })
 
