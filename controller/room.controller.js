@@ -61,6 +61,17 @@ module.exports.getRoom = async (req, res, next) => {
     res.json({yourRoom: rooms});
    
 }
+module.exports.upAvt = async (req, res, next) => {
+    try {
+      console.log(req.body.data, "***");
+      let room = await User.findOneAndUpdate({_id: req.body._id}, {
+          avt: req.body.data
+      });
+      res.json(room);
+    } catch(error) {
+      console.log(error);
+    }
+  }
 module.exports.leaveRoom = async (req, res, next) => {
     const updateUser = await User.findOneAndUpdate({_id: req.body.user._id}, {
         $pull: {groups: req.body.room._id} //toString() -> console

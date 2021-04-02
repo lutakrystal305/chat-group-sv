@@ -13,5 +13,6 @@ router.post('/createRoom', middleware.verify, controller2.createRoom);
 router.post('/checkRoom', middleware.verify, controller2.checkRoom);
 router.post('/getRoom', middleware.verify, controller2.getRoom);
 router.post('/leaveRoom', middleware.verify, controller2.leaveRoom);
+router.post('/upAvt', middleware.verify, controller2.upAvt);
 
 module.exports = router;
