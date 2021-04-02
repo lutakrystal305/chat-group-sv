@@ -64,7 +64,7 @@ module.exports.getRoom = async (req, res, next) => {
 module.exports.upAvt = async (req, res, next) => {
     try {
       console.log(req.body.data, "***");
-      let room = await User.findOneAndUpdate({_id: req.body._id}, {
+      let room = await Room.findOneAndUpdate({_id: req.body._id}, {
           avt: req.body.data
       });
       res.json(room);
