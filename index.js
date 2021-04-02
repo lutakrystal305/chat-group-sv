@@ -87,7 +87,7 @@ io.on("connection", (socket) => {
     })
     socket.on('client-send-message', (data) => {
         console.log(data.message);
-        io.sockets.in(data.to._id).emit('server-send-message', {from: data.from, message: data.message, to: data.to, date: data.date});
+        io.sockets.in(data.to._id).emit('server-send-message', {from: data.from, message: data.message, to: data.to, date: data.date, img: data.img});
     })
     socket.on('client-leave-room', (data) => {
         if (data) {
