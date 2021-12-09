@@ -54,10 +54,13 @@ module.exports.checkRoom = async (req, res, next) => {
     }
 }
 module.exports.getRoom = async (req, res, next) => {
+    console.log(req.body);
+    console.log(req.body.user);
+    req.body.user = JSON.parse(req.body.user);
     //req.body.user._id =mongoose.Types.ObjectId(req.body.user._id);
     //req.body.user.update = new Date(req.body.user.update);
     let rooms = await Room.find({members: {$in: [req.body.user._id]}}).sort({update: -1});
-    //console.log(rooms);
+    console.log(rooms);
     res.json({yourRoom: rooms});
    
 }
