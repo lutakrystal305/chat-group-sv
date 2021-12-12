@@ -25,6 +25,8 @@ var io = require('socket.io')(server, {
     cors: {
     origin: "https://kmess.herokuapp.com",
     methods: ["GET", "POST"],
+    //transports: ['websocket', 'polling'],
+    //allowEIO3: true,
     allowedHeaders: ["my-custom-header"],
     credentials: true
   }
@@ -57,6 +59,7 @@ server.listen(port, () => {
 const usersOnline = [];
 io.on("connection", (socket) => {
     console.log(socket.id+'da CONNECT');
+    socket.emit('connected', '123');
     socket.on('user-connect', ({ user }) => {
         console.log('nice!!');
         console.log(user);
@@ -78,6 +81,8 @@ io.on("connection", (socket) => {
         }
     })
     socket.on('client-send-room-now', (data) => {
+        console.log(data);
+        console.log(`connected to : ${data._id}`);
         if (data) {
             socket.join(data._id);
         }
@@ -87,6 +92,8 @@ io.on("connection", (socket) => {
     })
     socket.on('client-send-message', (data) => {
         console.log(data.message);
+        console.log(data.to._id);
+        data.to = JSON.parse(data.to);
         io.sockets.in(data.to._id).emit('server-send-message', {from: data.from, message: data.message, to: data.to, date: data.date, img: data.img});
     })
     socket.on('client-leave-room', (data) => {
