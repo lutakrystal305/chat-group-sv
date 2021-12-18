@@ -3,10 +3,10 @@ const Room = require('../models/room.model');
 const mongoose = require('mongoose');
 
 module.exports.message = async (req, res, next) => {
-    console.log(req.body.group);
+    //console.log(req.body.group);
 
     req.body.group = JSON.parse(req.body.group);
-    console.log(req.body.group._id);
+    //console.log(req.body.group._id);
    //.sort({date: 1}).exec(function(err, result) {
         //if (err) throw err;
         //console.log(result)
@@ -31,8 +31,14 @@ module.exports.message = async (req, res, next) => {
     res.json(top[0]);
 }*/
 module.exports.upMess = async (req, res, next) => {
-    req.body.to = JSON.parse(req.body.to);
-    req.body.to = mongoose.Types.ObjectId(req.body.to._id);
+    console.log('up message');
+    //console.log(req.body);
+    //req.body.to = JSON.parse(req.body.to);
+    req.body.from = JSON.parse(req.body.from);
+    req.body.from._id = req.body.from.id;
+    //console.log(req.body.from._id);
+    //console.log(req.body.date);
+    //req.body.to = mongoose.Types.ObjectId(req.body.to._id);
     //console.log(req.body.to)
     const newMess = await new Message(req.body);
     await newMess.save();

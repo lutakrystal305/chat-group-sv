@@ -8,13 +8,16 @@ module.exports.getRooms = async (req, res, next) => {
     res.json(rooms);
 }
 module.exports.findRoom = async (req, res, next) => {
-    const room = await Room.find();
+    const room = await Room.find(); 
     const rooms = room.filter(x => 
          x.name.toLowerCase().indexOf(req.body.nameRoom.toLowerCase()) !== -1
     );
     res.json(rooms);
 }
 module.exports.createRoom = async (req, res, next) => {
+    //console.log(req.body.user);
+    req.body.user = JSON.parse(req.body.user); //for flutter
+    req.body.user._id = req.body.user.id; //for flutter
     const newRoom = new Room({name: req.body.nameRoom, host: req.body.user._id, members: [req.body.user._id], topMess: {message: `welcome to ${req.body.nameRoom} room`, from: {name:'key'}}});
     await newRoom.save();
     if (newRoom) {
@@ -27,6 +30,9 @@ module.exports.createRoom = async (req, res, next) => {
     res.json(newRoom);
 }
 module.exports.checkRoom = async (req, res, next) => {
+    //console.log(req.body.user);
+    req.body.user = JSON.parse(req.body.user); // for flutter
+    req.body.user._id = req.body.user.id;  // for flutter
     const room = await Room.findOne({_id: req.body._id});
     let yes = false;
     room.members.forEach(x => {
@@ -54,13 +60,13 @@ module.exports.checkRoom = async (req, res, next) => {
     }
 }
 module.exports.getRoom = async (req, res, next) => {
-    console.log(req.body);
-    console.log(req.body.user);
+    //console.log(req.body);
+    //console.log(req.body.user);
     req.body.user = JSON.parse(req.body.user);
     //req.body.user._id =mongoose.Types.ObjectId(req.body.user._id);
     //req.body.user.update = new Date(req.body.user.update);
     let rooms = await Room.find({members: {$in: [req.body.user._id]}}).sort({update: -1});
-    console.log(rooms);
+    //console.log(rooms);
     res.json({yourRoom: rooms});
    
 }
@@ -76,6 +82,11 @@ module.exports.upAvt = async (req, res, next) => {
     }
   }
 module.exports.leaveRoom = async (req, res, next) => {
+    console.log(req,body);
+    req.body.user = JSON.parse(req.body.user); // for flutter
+    req.body.user._id = req.body.user.id; // for flutter
+    req.body.room = JSON.parse(req.body.room); // for flutter
+    req.body.room._id = req.body.room.id; // for flutter
     const updateUser = await User.findOneAndUpdate({_id: req.body.user._id}, {
         $pull: {groups: req.body.room._id} //toString() -> console
     })

@@ -81,8 +81,8 @@ io.on("connection", (socket) => {
         }
     })
     socket.on('client-send-room-now', (data) => {
-        console.log(data);
-        console.log(`connected to : ${data._id}`);
+        //console.log(data);
+        //console.log(`connected to : ${data._id}`);
         if (data) {
             socket.join(data._id);
         }
@@ -91,10 +91,17 @@ io.on("connection", (socket) => {
         socket.emit('server-send-room-now', socket.roomNow);
     })
     socket.on('client-send-message', (data) => {
-        console.log(data.message);
-        console.log(data.to._id);
-        data.to = JSON.parse(data.to);
-        io.sockets.in(data.to._id).emit('server-send-message', {from: data.from, message: data.message, to: data.to, date: data.date, img: data.img});
+        console.log(true);
+ 
+        //console.log(data.message);
+        data = JSON.parse(data);
+        //console.log(data);
+        //data.from._id = data.from.id;
+        //data.to = JSON.parse(data.to);
+        // console.log(data.to._id);
+        // io.sockets.in(data.to._id).emit('server-send-message', {from: data.from, message: data.message, to: data.to, date: data.date, img: data.img});
+        //console.log(data.to);
+        io.sockets.in(data.to).emit('server-send-message', {from: data.from, message: data.message, to: data.to, date: data.date, img: data.img});
     })
     socket.on('client-leave-room', (data) => {
         if (data) {
