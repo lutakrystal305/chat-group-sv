@@ -82,11 +82,11 @@ module.exports.upAvt = async (req, res, next) => {
     }
   }
 module.exports.leaveRoom = async (req, res, next) => {
-    console.log(req,body);
+    console.log(req.body);
     req.body.user = JSON.parse(req.body.user); // for flutter
     req.body.user._id = req.body.user.id; // for flutter
     req.body.room = JSON.parse(req.body.room); // for flutter
-    req.body.room._id = req.body.room.id; // for flutter
+    //req.body.room._id = req.body.room.id; // for flutter
     const updateUser = await User.findOneAndUpdate({_id: req.body.user._id}, {
         $pull: {groups: req.body.room._id} //toString() -> console
     })
